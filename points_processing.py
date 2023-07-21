@@ -30,11 +30,11 @@ def get_ground(pcd, angles, angle_threshold=20):
         distance_threshold=0.25,
         ransac_n=3,
         num_iterations=1000)
-    inlier_cloud = np.asarray(pcd.select_by_index(inliers).points)
+    
+    inlier_cloud = pcd.select_by_index(inliers)
     angles = angles[inliers]
-    inlier_cloud = inlier_cloud[angles > angle_threshold]
-    inlier_cloud = o3d.cpu.pybind.utility.Vector3dVector(inlier_cloud)
-    inlier_cloud = o3d.geometry.PointCloud(inlier_cloud)
+    angles_condition = (angles > angle_threshold).nonzero()[0]
+    inlier_cloud = inlier_cloud.select_by_index(angles_condition)
     inlier_cloud.paint_uniform_color([1.0, 0, 0])
     return inlier_cloud, angles
 
