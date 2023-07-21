@@ -30,8 +30,7 @@ if __name__ == '__main__':
                         default=desktop_dir,
                         help="path to output dir (file is .las)")
     parser.add_argument("--show_points",
-                        type=bool,
-                        default=False,
+                        action='store_true',
                         help="whether to show cloud points or not")
 
     args = parser.parse_args()
@@ -49,10 +48,10 @@ if __name__ == '__main__':
         )
     # 5. Show point clouds (if necessary)
     if args.show_points:
-        pcd.voxel_down_sample(0.5)
+        pcd.voxel_down_sample(0.1)
+        o3d.visualization.draw_geometries([pcd])
         o3d.visualization.draw_geometries([inlier_cloud])
         o3d.visualization.draw_geometries([cloud])
-        o3d.visualization.draw_geometries([pcd, cloud])
     # 6. Save the files (.las format)
     print(filepath)
     save_as_las(filepath, cloud)
